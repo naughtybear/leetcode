@@ -1,5 +1,5 @@
-// Runtime: 6 ms, faster than 85.54% of C++ online submissions for Merge Two Sorted Lists.
-// Memory Usage: 14.8 MB, less than 44.29% of C++ online submissions for Merge Two Sorted Lists.
+// Runtime: 1436 ms, faster than 5.02% of C++ online submissions for Merge k Sorted Lists.
+// Memory Usage: 13 MB, less than 86.26% of C++ online submissions for Merge k Sorted Lists
 #include<bits/stdc++.h>
 
 using namespace std;
@@ -24,6 +24,45 @@ public:
         }
 
         ListNode *head;
+        int min_index, min_val = INT_MAX;
+        int remain = lists.size();
+
+        for (int i = 0; i < lists.size(); i++) {
+            if (lists[i] == NULL){
+                remain--;
+                continue;
+            }
+            if (lists[i] -> val < min_val) { 
+                min_index = i;
+                min_val = lists[i] -> val;
+            }
+        }
+        if (!remain)
+            return NULL;
+        head = lists[min_index];
+        lists[min_index] = lists[min_index] -> next;
+        if (lists[min_index] == NULL)
+            remain--;
+
+        ListNode *current = head;
+        while(remain) {
+            min_val = INT_MAX;
+
+            for (int i = 0; i < lists.size(); i++) {
+                if (lists[i] == NULL)
+                    continue;
+                if (lists[i] -> val < min_val) { 
+                    min_index = i;
+                    min_val = lists[i] -> val;
+                }
+            }
+            current -> next = lists[min_index];
+            current = current -> next;
+            lists[min_index] = lists[min_index] -> next;
+            if (lists[min_index] == NULL)
+                remain--;
+        }
+        return head;
     }
 };
 
